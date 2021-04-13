@@ -1,0 +1,115 @@
+<!DOCTYPE HTML>
+{% load static %}
+<html lang="ru">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"> <!--  Здесь похоже только значки - можно будет убрать -->
+        <!-- Bootstrap core CSS -->
+        <link rel="stylesheet" href="{% static 'bootstrap-4.3.1/css/bootstrap.min.css' %}">
+        <!-- Material Design Bootstrap -->
+        <link rel="stylesheet" href="{% static 'MDB-Free_4.8.5/css/mdb.min.css' %}">
+        <!-- Your custom styles (optional) -->
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        <title>Выполнение Scripts</title>
+    </head>
+   <body>
+     {% if error_message %}<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Error!: </strong>{{ error_message }}<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>{% endif %}		{% block content %}{% endblock %}
+      <div class="window">
+<!-- site_head -->
+          <header class="header" id="site_head">
+                <div class="header__top">
+                     <div class="container">
+                        <div class="row">
+                           <div class="col-md-12">
+                              <div class="text-header days">
+                                  <span><i>Специально для Юшинова А.А. - выполнение произвольных скриптов на произвольных MikroTik'ах</i></span>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                </div>
+          </header>
+          <!-- <form action="{% url 'mainform' %}" method="post">-->
+<!-- site_content -->
+            <div class="content" id="content">
+                <div class="container wrapper-container">
+                    <div class="row">
+						<div class="col-sm-3">
+ 							<div class="md-form form-sm">
+							  <input type="text" id="login" class="form-control form-control-sm" name="login" value="admin">
+							  <label for="login">Login</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="md-form form-sm">
+							  <input type="text" id="pass" class="form-control form-control-sm" name="pass" value="">
+							  <label for="pass">Password</label>
+							</div>
+						</div>
+                        <div class="col-sm-1">
+ 							<div class="md-form form-sm" id="dtPortState"></div>
+						</div>
+                        <div class="col-sm-3">
+ 							<div class="md-form form-sm">
+                                <input class="btn-sm btn-primary" type="submit" id="run" value="Run">
+							</div>
+						</div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-3">
+                            <label>Список IP:</label>
+                            <textarea class="form-control" rows="25" name="ips" id="ips">{{ result }}</textarea>
+                        </div>
+                        <div class="col-sm-12 col-md-9">
+                            <label>Commands:</label>
+                            <textarea class="form-control" rows="25" name="commands" id="commands">commands</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+       <!-- </form> -->
+<!-- site_footer -->
+<footer class="page-footer font-small grey lighten-5 black-text pt-4">
+   <div class="container">
+	   <div class="container-fluid text-center lighten-3 text-md-left">
+	      <div class="row">
+	         <hr class="clearfix w-100 d-md-none pb-2">
+	         <div class="col-md-12 mb-md-0 mb-12">
+	            <!-- Links -->
+	            <h5 class="text-uppercase">Контакты</h5>
+	            <p>Корбун Иван Иванович <label class="p-phone"><a href="tel:+79103280128">+7 910 328 0128</a></label><a href="mailto:x_earth@mail.ru"> (x_earth@mail.ru)</a></p>
+	         </div>
+	      </div>
+	   </div>
+   </div>
+   <div class="footer-copyright text-center py-3 black-text">© 2021 Copyright <a href="{% url 'mainform' %}">Cobra's Co</a></div>
+</footer>
+      </div>
+      <a href="#" id="back_to_top" style="display: none;"><span class="fa fa-chevron-up"></span></a>
+      <script src="{% static 'MDB-Free_4.8.5/js/jquery-3.4.1.min.js' %}"></script>
+      <script src="{% static 'MDB-Free_4.8.5/js/bootstrap.min.js' %}"></script>
+      <script src="{% static 'MDB-Free_4.8.5/js/mdb.min.js' %}"></script>
+      <script src="{% static 'MDB-Free_4.8.5/js/popper.min.js' %}"></script>
+
+	<script type="text/javascript">
+		$(function() {
+			// Когда страница загрузилась
+			$(document).ready(function() {
+			});
+			// Когда кликают на закладку КАРТА
+			$('#run').click(function(e){
+				$('#dtPortState').html('<div class="d-flex justify-content-center"><div class="spinner-border text-primary" role="status">  <span class="sr-only">Loading...</span></div></div>');
+				$.get('{% url 'new_list' %}', {'login': $('#login').val() ,'pass': $('#pass').val(), 'ips': $('#ips').val(), 'commands': $('#commands').val()}, function(data) {
+						$('#ips').val(data);
+                $('#dtPortState').html('');
+				});
+			});
+		});
+	</script>
+   </body>
+</html>
+
